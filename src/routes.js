@@ -8,6 +8,7 @@ const PasswordController = require('./app/controllers/PasswordController');
 const ResetPasswordController = require('./app/controllers/ResetPasswordController');
 
 const AccountController = require('./app/controllers/AccountController');
+const CardController = require('./app/controllers/CardController');
 
 const routes = express.Router();
 
@@ -25,5 +26,11 @@ routes.get('/accounts/:id', AccountController.show);
 routes.post('/accounts', AccountController.store);
 routes.put('/accounts/:id', AccountController.update);
 routes.delete('/accounts/:id', AccountController.destroy);
+
+routes.get('/cards', CardController.index);
+routes.get('/cards/:id', CardController.show);
+routes.post('/cards', CardController.store);
+routes.put('/cards/:id', CardController.update);
+routes.delete('/cards/:id', CardController.destroy);
 
 module.exports = routes;

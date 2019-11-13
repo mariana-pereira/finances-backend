@@ -1,4 +1,3 @@
-// index, show, store, update, destroy
 const { Account } = require('../models');
 
 module.exports = {
