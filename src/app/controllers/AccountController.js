@@ -16,7 +16,7 @@ module.exports = {
         try {
             const account = await Account.findByPk(req.params.id);
 
-            return res.send({ account });
+            return res.json(account);
 
         } catch (err) {
             return res.status(400).send({ error: 'Error loading account' });

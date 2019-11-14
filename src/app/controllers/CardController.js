@@ -5,7 +5,7 @@ module.exports = {
     async store(req, res) {
         try {
             const card = await Card.create({ ...req.body, user_id: req.userId });
-            return res.send({ card });
+            return res.json(card);
     
         } catch (err) {
             return res.status(400).send({ error: 'Error creating card' });
@@ -17,7 +17,7 @@ module.exports = {
         try {
             const card = await Card.findByPk(req.params.id);
     
-            return res.send({ card });
+            return res.json(card);
     
         } catch(err) {
             return res.status(400).send({ error: 'Error loading card' });
@@ -28,7 +28,7 @@ module.exports = {
         try {
             const cards = await Card.findAll({ where: { user_id: req.userId } });
 
-            return res.send({ cards });
+            return res.json(cards);
 
         } catch (err) {
             return res.status(400).send({ error: 'Error loading cards' });
