@@ -1,0 +1,63 @@
+'use strict';
+
+module.exports = {
+  up: (queryInterface, Sequelize) => {
+    return queryInterface.createTable('expenses', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
+      date: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      amount: {
+        allowNull: false,
+        type: Sequelize.DECIMAL(10,2),
+      },
+      shop: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      category: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      invoice_id: {
+        type: Sequelize.INTEGER,
+        references: { model: 'Invoices', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+        allowNull: false
+      },
+      card_id: {
+        type: Sequelize.INTEGER,
+        references: { model: 'Cards', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+        allowNull: false
+      },
+      user_id: {
+        type: Sequelize.INTEGER,
+        references: { model: 'Users', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+        allowNull: false
+      },
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+    });
+  },
+
+  down: (queryInterface) => {
+    return queryInterface.dropTable('expenses');
+  }
+};

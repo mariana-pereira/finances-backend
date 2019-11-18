@@ -12,6 +12,12 @@ const BudgetController = require('./app/controllers/BudgetController');
 const BudgetDashboardController = require('./app/controllers/BudgetDashboardController');
 const CardController = require('./app/controllers/CardController');
 const CompanyController = require('./app/controllers/CompanyController');
+const ExpenseController = require('./app/controllers/ExpenseController');
+const ExpenseYearController = require('./app/controllers/ExpenseYearController');
+const ExpenseDashboardController = require('./app/controllers/ExpenseDashboardController');
+const ExpenseInvoiceController = require('./app/controllers/ExpenseCategoryMonthController');
+const ExpenseCategoryMonthController = require('./app/controllers/ExpenseCategoryYearController');
+const ExpenseCategoryYearController = require('./app/controllers/ExpenseCategoryYearController');
 const InvoiceController = require('./app/controllers/InvoiceConreoller');
 const InvoiceCardController = require('./app/controllers/InvoiceCardController');
 const InvoiceDashboardController = require('./app/controllers/InvoiceDashboardController');
@@ -53,6 +59,21 @@ routes.get('/companies/:id', CompanyController.show);
 routes.post('/companies', CompanyController.store);
 routes.put('/companies/:id', CompanyController.update);
 routes.delete('/companies/:id', CompanyController.destroy);
+
+routes.get('/expenses/invoice', ExpenseInvoiceController.index);
+
+routes.get('/expenses/dashboard', ExpenseDashboardController.index);
+
+routes.get('/expenses/year', ExpenseYearController.index);
+
+routes.get('/expenses/category/month', ExpenseCategoryMonthController.index);
+routes.get('/expenses/category/year', ExpenseCategoryYearController.index);
+
+routes.get('/expenses', ExpenseController.index);
+routes.get('/expenses/:id', ExpenseController.show);
+routes.post('/expenses', ExpenseController.store);
+routes.put('/expenses/:id', ExpenseController.update);
+routes.delete('/expenses/:id', ExpenseController.destroy);
 
 routes.get('/invoices/card', InvoiceCardController.index);
 
