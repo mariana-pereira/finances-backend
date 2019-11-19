@@ -15,8 +15,7 @@ const CompanyController = require('./app/controllers/CompanyController');
 const ExpenseController = require('./app/controllers/ExpenseController');
 const ExpenseYearController = require('./app/controllers/ExpenseYearController');
 const ExpenseDashboardController = require('./app/controllers/ExpenseDashboardController');
-const ExpenseInvoiceController = require('./app/controllers/ExpenseCategoryMonthController');
-const ExpenseCategoryMonthController = require('./app/controllers/ExpenseCategoryYearController');
+const ExpenseCategoryMonthController = require('./app/controllers/ExpenseCategoryMonthController');
 const ExpenseCategoryYearController = require('./app/controllers/ExpenseCategoryYearController');
 const InvoiceController = require('./app/controllers/InvoiceConreoller');
 const InvoiceCardController = require('./app/controllers/InvoiceCardController');
@@ -60,16 +59,14 @@ routes.post('/companies', CompanyController.store);
 routes.put('/companies/:id', CompanyController.update);
 routes.delete('/companies/:id', CompanyController.destroy);
 
-routes.get('/expenses/invoice', ExpenseInvoiceController.index);
+routes.get('/expenses/category/month', ExpenseCategoryMonthController.index);
+routes.get('/expenses/category/year', ExpenseCategoryYearController.index);
 
 routes.get('/expenses/dashboard', ExpenseDashboardController.index);
 
 routes.get('/expenses/year', ExpenseYearController.index);
 
-routes.get('/expenses/category/month', ExpenseCategoryMonthController.index);
-routes.get('/expenses/category/year', ExpenseCategoryYearController.index);
-
-routes.get('/expenses', ExpenseController.index);
+routes.get('/expenses/invoice', ExpenseController.index);
 routes.get('/expenses/:id', ExpenseController.show);
 routes.post('/expenses', ExpenseController.store);
 routes.put('/expenses/:id', ExpenseController.update);

@@ -37,6 +37,17 @@ module.exports = {
                     ]
                 }
             });
+
+            const decoration = await Expense.sum('amount', {
+                where: {
+                    [Op.and]: [
+                        { date: sequelize.where(sequelize.fn('MONTH', sequelize.col('date')), req.headers.month) },
+                        { date: sequelize.where(sequelize.fn('YEAR', sequelize.col('date')), req.headers.year) },
+                        { user_id: req.userId },
+                        { category: 'Decoração' }
+                    ]
+                }
+            });
     
             const bill = await Expense.sum('amount', {
                 where: {
@@ -78,6 +89,17 @@ module.exports = {
                         { date: sequelize.where(sequelize.fn('YEAR', sequelize.col('date')), req.headers.year) },
                         { user_id: req.userId },
                         { category: 'Pet' }
+                    ]
+                }
+            });
+
+            const picpay = await Expense.sum('amount', {
+                where: {
+                    [Op.and]: [
+                        { date: sequelize.where(sequelize.fn('MONTH', sequelize.col('date')), req.headers.month) },
+                        { date: sequelize.where(sequelize.fn('YEAR', sequelize.col('date')), req.headers.year) },
+                        { user_id: req.userId },
+                        { category: 'PicPay' }
                     ]
                 }
             });
@@ -137,7 +159,7 @@ module.exports = {
                 }
             });
     
-            return res.send({ food, subscription, beauty, bill, sport, recreation, pet, health, tech, transportation, clothing, other });
+            return res.send({ food, subscription, beauty, bill, decoration, sport, recreation, pet, picpay, health, tech, transportation, clothing, other });
     
         } catch (err) {
             return res.status(400).send({ error: 'Error loading expenses' });
