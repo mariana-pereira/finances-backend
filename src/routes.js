@@ -22,6 +22,7 @@ const InvoiceController = require('./app/controllers/InvoiceConreoller');
 const InvoiceCardController = require('./app/controllers/InvoiceCardController');
 const InvoiceDashboardController = require('./app/controllers/InvoiceDashboardController');
 const ItemController = require('./app/controllers/ItemController');
+const ProfitController = require('./app/controllers/ProfitController');
 const TargetController = require('./app/controllers/TargetController');
 
 const routes = express.Router();
@@ -94,6 +95,10 @@ routes.delete('/invoices/:id', InvoiceController.destroy);
 routes.get('/items', ItemController.index);
 routes.post('/items', ItemController.store);
 routes.delete('/items/:id', ItemController.destroy);
+
+routes.get('/profits', ProfitController.index);
+routes.post('/profits', ProfitController.store);
+routes.delete('/profits/:id', ProfitController.destroy);
 
 routes.get('/targets', TargetController.index);
 routes.get('/targets/:id', TargetController.show);
