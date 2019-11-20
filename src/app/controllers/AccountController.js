@@ -27,7 +27,9 @@ module.exports = {
         try {
             const accounts = await Account.findAll({ where: { user_id: req.userId } });
 
-            return res.json(accounts);
+            const total = await Account.sum('account_balance', { where: { user_id: req.userId } });
+
+            return res.json({ accounts, total });
 
         } catch (err) {
             return res.status(400).send({ error: 'Error loading accounts' });
