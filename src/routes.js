@@ -20,6 +20,7 @@ const ExpenseCategoryYearController = require('./app/controllers/ExpenseCategory
 const InvoiceController = require('./app/controllers/InvoiceConreoller');
 const InvoiceCardController = require('./app/controllers/InvoiceCardController');
 const InvoiceDashboardController = require('./app/controllers/InvoiceDashboardController');
+const ItemController = require('./app/controllers/ItemController');
 const TargetController = require('./app/controllers/TargetController');
 
 const routes = express.Router();
@@ -82,6 +83,10 @@ routes.get('/invoices/:id', InvoiceController.show);
 routes.post('/invoices', InvoiceController.store);
 routes.put('/invoices/:id', InvoiceController.update);
 routes.delete('/invoices/:id', InvoiceController.destroy);
+
+routes.get('/items', ItemController.index);
+routes.post('/items', ItemController.store);
+routes.delete('/items/:id', ItemController.destroy);
 
 routes.get('/targets', TargetController.index);
 routes.get('/targets/:id', TargetController.show);
