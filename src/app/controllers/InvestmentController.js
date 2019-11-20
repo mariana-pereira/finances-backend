@@ -3,12 +3,26 @@ const { Investment, Account, Target } = require('../models');
 module.exports = {
     async store(req, res) {
         try {
-            const investment = await Investment.create({ ...req.body, account_id: req.headers.account_id, user_id: req.userId });
+            const { target_id } = req.body;
+
+            const investment = await Investment.create({ ...req.body, account_id: req.headers.account_id, user_id: req.userId, total_amount: req.body.application_amount });
+
+            const investment_amount = await Investment.sum('total_amount', { where: { target_id } });
+
+            await Target.update({
+                actual_amount: investment_amount,
+            }, {
+                where: {
+                    id: target_id
+                }
+            });
+
             return res.json(investment);
-    
+
         } catch (err) {
+            console.log(err)
             return res.status(400).send({ error: 'Error creating investment' });
-    
+
         }
     },
 
@@ -20,17 +34,17 @@ module.exports = {
                     { model: Target, as: 'target' },
                 ]
             });
-    
+
             return res.json(investment);
-    
-        } catch(err) {
+
+        } catch (err) {
             return res.status(400).send({ error: 'Error loading investment' });
         }
     },
 
     async index(req, res) {
         try {
-            const investments = await Investment.findAll({ 
+            const investments = await Investment.findAll({
                 where: { user_id: req.userId },
                 include: [
                     { model: Account, as: 'account' },
@@ -38,10 +52,10 @@ module.exports = {
                 ]
             });
             const total = await Investment.sum('total_amount', { where: { user_id: req.userId } });
-    
+
             return res.json({ investments, total });
-    
-        } catch(err) {
+
+        } catch (err) {
             return res.status(400).send({ error: 'Error loading investments' });
         }
     },
@@ -50,22 +64,22 @@ module.exports = {
         try {
 
             const { name, type, tax, application_date, redeem_date, application_amount } = req.body;
-    
+
             await Investment.update({
-                name, 
+                name,
                 type,
                 tax,
                 application_date,
                 redeem_date,
                 application_amount
-            } , {
+            }, {
                 where: {
                     id: req.params.id
                 }
             });
-    
-            return res.status(200).send({ message: 'Investment sucessfuly updated'});
-    
+
+            return res.status(200).send({ message: 'Investment sucessfuly updated' });
+
         } catch (err) {
             return res.status(400).send({ error: 'Error updating investment' });
         }
@@ -75,13 +89,13 @@ module.exports = {
         try {
             await Investment.destroy({
                 where: {
-                  id: req.params.id
+                    id: req.params.id
                 }
-              });
-    
-              return res.status(200).send({ message: 'Investment sucessfuly deleted' });
-    
-        } catch(err) {
+            });
+
+            return res.status(200).send({ message: 'Investment sucessfuly deleted' });
+
+        } catch (err) {
             return res.status(400).send({ error: 'Error deleting investment' });
         }
     }
