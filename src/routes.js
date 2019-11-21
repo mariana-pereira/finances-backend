@@ -22,6 +22,14 @@ const InvoiceController = require('./app/controllers/InvoiceConreoller');
 const InvoiceCardController = require('./app/controllers/InvoiceCardController');
 const InvoiceDashboardController = require('./app/controllers/InvoiceDashboardController');
 const ItemController = require('./app/controllers/ItemController');
+const MovimentationController = require('./app/controllers/MovimentationController');
+const MovimentationMonthController = require('./app/controllers/MovimentationMonthController');
+const MovimentationYearController = require('./app/controllers/MovimentationYearController');
+const MovimentationCategoryMonthController = require('./app/controllers/MovimentationCategoryMonthController');
+const MovimentationCategoryYearController = require('./app/controllers/MovimentationCategoryYearController');
+const MovimentationCompanyController = require('./app/controllers/MovimentationCompanyController');
+const MovimentationIncomeController = require('./app/controllers/MovimentationIncomeController');
+const MovimentationOutcomeController = require('./app/controllers/MovimentationOutcomeController');
 const ProfitController = require('./app/controllers/ProfitController');
 const TargetController = require('./app/controllers/TargetController');
 
@@ -95,6 +103,23 @@ routes.delete('/invoices/:id', InvoiceController.destroy);
 routes.get('/items', ItemController.index);
 routes.post('/items', ItemController.store);
 routes.delete('/items/:id', ItemController.destroy);
+
+routes.post('/movimentations/income', MovimentationIncomeController.store);
+routes.post('/movimentations/outcome', MovimentationOutcomeController.store);
+routes.get('/movimentations/income/month', MovimentationIncomeController.index);
+routes.get('/movimentations/outcome/month', MovimentationOutcomeController.index);
+
+routes.get('/movimentations/month', MovimentationMonthController.index);
+routes.get('/movimentations/year', MovimentationYearController.index);
+
+routes.get('/movimentations/company', MovimentationCompanyController.index);
+routes.get('/movimentations/category/month', MovimentationCategoryMonthController.index);
+routes.get('/movimentations/category/year', MovimentationCategoryYearController.index);
+
+routes.get('/movimentations', MovimentationController.index);
+routes.get('/movimentations/:id', MovimentationController.show);
+routes.put('/movimentations/:id', MovimentationController.update);
+routes.delete('/movimentations/:id', MovimentationController.destroy);
 
 routes.get('/profits', ProfitController.index);
 routes.post('/profits', ProfitController.store);
