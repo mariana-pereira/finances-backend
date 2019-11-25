@@ -14,7 +14,17 @@ module.exports = {
                 user_id: req.userId,
                 account_id: req.headers.account_id,
                 amount: value,
-                type: 'Outcome'
+                type: 'Débito'
+            });
+
+            const movimentations = await Movimentation.sum('amount', { where: { account_id: req.headers.account_id } });
+                
+            await Account.update({
+                account_balance: movimentations
+            } , {
+                where: {
+                    id: req.headers.account_id
+                }
             });
 
             return res.json(movimentation);
@@ -33,7 +43,7 @@ module.exports = {
                         { date: sequelize.where(sequelize.fn('MONTH', sequelize.col('date')), req.headers.month) },
                         { date: sequelize.where(sequelize.fn('YEAR', sequelize.col('date')), req.headers.year) },
                         { user_id: req.userId },
-                        { type: 'Outcome' }
+                        { type: 'Débito' }
                     ]
                 }, include: [
                     { model: Account, as: 'account' },
@@ -46,7 +56,7 @@ module.exports = {
                         { date: sequelize.where(sequelize.fn('MONTH', sequelize.col('date')), req.headers.month) },
                         { date: sequelize.where(sequelize.fn('YEAR', sequelize.col('date')), req.headers.year) },
                         { user_id: req.userId },
-                        { type: 'Outcome' }
+                        { type: 'Débito' }
                     ]
                 }
             });

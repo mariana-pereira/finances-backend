@@ -4,7 +4,7 @@ module.exports = {
     async store(req, res) {
         try {
             const expense = await Expense.create({ ...req.body, invoice_id: req.headers.invoice_id, card_id: req.headers.card_id, user_id: req.userId });
-            
+
             const amount = parseFloat(await Expense.sum('amount', { where: { invoice_id: req.headers.invoice_id } }));
 
             await Invoice.update({
@@ -12,6 +12,19 @@ module.exports = {
             }, {
                 where: {
                     id: req.headers.invoice_id
+                }
+            });
+
+            const invoices = await Invoice.sum('invoice_amount', { where: { paid: false, card_id: req.headers.card_id } });
+            const { total_limit } = await Card.findByPk(req.headers.card_id);
+
+            const total = parseFloat(total_limit) - parseFloat(invoices);
+
+            await Card.update({
+                available_limit: total
+            }, {
+                where: {
+                    id: req.headers.card_id
                 }
             });
 
@@ -43,9 +56,9 @@ module.exports = {
         try {
             const expenses = await Expense.findAll({ where: { invoice_id: req.headers.invoice_id } });
             const total = await Expense.sum('amount', { where: { invoice_id: req.headers.invoice_id } });
-    
+
             return res.json({ expenses, total });
-    
+
         } catch (err) {
             return res.status(400).send({ error: 'Error loading expenses' });
         }
@@ -67,13 +80,26 @@ module.exports = {
                 }
             });
 
-            const ExpenseAmount = parseFloat(await Expense.sum('amount', { where: { invoice_id: req.headers.invoice_id } }));
+            const ExpenseAmount = await Expense.sum('amount', { where: { invoice_id: req.headers.invoice_id } });
 
             await Invoice.update({
                 invoice_amount: ExpenseAmount
             }, {
                 where: {
                     id: req.headers.invoice_id
+                }
+            });
+
+            const invoices = await Invoice.sum('invoice_amount', { where: { paid: false, card_id: req.headers.card_id } });
+            const { total_limit } = await Card.findByPk(req.headers.card_id);
+
+            const total = parseFloat(total_limit) - parseFloat(invoices);
+
+            await Card.update({
+                available_limit: total
+            }, {
+                where: {
+                    id: req.headers.card_id
                 }
             });
 
@@ -99,6 +125,19 @@ module.exports = {
             }, {
                 where: {
                     id: req.headers.invoice_id
+                }
+            });
+
+            const invoices = await Invoice.sum('invoice_amount', { where: { paid: false, card_id: req.headers.card_id } });
+            const { total_limit } = await Card.findByPk(req.headers.card_id);
+
+            const total = parseFloat(total_limit) - parseFloat(invoices);
+
+            await Card.update({
+                available_limit: total
+            }, {
+                where: {
+                    id: req.headers.card_id
                 }
             });
 

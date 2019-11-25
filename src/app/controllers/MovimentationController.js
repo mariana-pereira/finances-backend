@@ -1,13 +1,18 @@
 const { Movimentation, Account, Company } = require('../models');
 
 module.exports = {
-    
+
     async show(req, res) {
         try {
-            const movimentation = await Movimentation.findByPk(req.params.id);
-    
+            const movimentation = await Movimentation.findByPk(req.params.id, {
+                include: [
+                    { model: Account, as: 'account' },
+                    { model: Company, as: 'company' },
+                ],
+            })
+
             return res.json(movimentation);
-    
+
         } catch (err) {
             return res.status(400).send({ error: 'Error loading movimentation' });
         }
@@ -23,11 +28,11 @@ module.exports = {
                 ],
                 order: [['date', 'DESC']]
             });
-    
+
             const total = await Movimentation.sum('amount', { where: { user_id: req.userId } });
-    
+
             return res.json({ movimentations, total });
-    
+
         } catch (err) {
             return res.status(400).send({ error: 'Error loading movimentations' });
         }
@@ -37,19 +42,29 @@ module.exports = {
         try {
 
             const { date, amount, category } = req.body;
-    
+
             await Movimentation.update({
                 date,
                 amount,
                 category,
             }, {
-                    where: {
-                        id: req.params.id
-                    }
-                });
-    
+                where: {
+                    id: req.params.id
+                }
+            });
+
+            const movimentations = await Movimentation.sum('amount', { where: { account_id: req.headers.account_id } });
+
+            await Account.update({
+                account_balance: movimentations
+            }, {
+                where: {
+                    id: req.headers.account_id
+                }
+            });
+
             return res.status(200).send({ message: 'Movimentation sucessfuly updated' });
-    
+
         } catch (err) {
             return res.status(400).send({ error: 'Error updating movimentation' });
         }
@@ -62,9 +77,19 @@ module.exports = {
                     id: req.params.id
                 }
             });
-    
+
+            const movimentations = await Movimentation.sum('amount', { where: { account_id: req.headers.account_id } });
+
+            await Account.update({
+                account_balance: movimentations
+            }, {
+                where: {
+                    id: req.headers.account_id
+                }
+            });
+
             return res.status(200).send({ message: 'Movimentation sucessfuly deleted' });
-    
+
         } catch (err) {
             return res.status(400).send({ error: 'Error deleting movimentation' });
         }

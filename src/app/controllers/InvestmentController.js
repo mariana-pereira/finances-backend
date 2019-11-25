@@ -1,26 +1,34 @@
-const { Investment, Account, Target } = require('../models');
+const { Investment, Account, Target, Profit } = require('../models');
 
 module.exports = {
     async store(req, res) {
         try {
-            const { target_id } = req.body;
 
             const investment = await Investment.create({ ...req.body, account_id: req.headers.account_id, user_id: req.userId, total_amount: req.body.application_amount });
 
-            const investment_amount = await Investment.sum('total_amount', { where: { target_id } });
+            const investment_target = await Investment.sum('total_amount', { where: { target_id: investment.target_id } });
 
             await Target.update({
-                actual_amount: investment_amount,
+                actual_amount: investment_target,
             }, {
                 where: {
-                    id: target_id
+                    id: investment.target_id
+                }
+            });
+
+            const investment_account = await Investment.sum('total_amount', { where: { account_id: investment.account_id } });
+    
+            await Account.update({
+                investments_balance: investment_account
+            } , {
+                where: {
+                    id: investment.account_id
                 }
             });
 
             return res.json(investment);
 
         } catch (err) {
-            console.log(err)
             return res.status(400).send({ error: 'Error creating investment' });
 
         }
@@ -65,16 +73,41 @@ module.exports = {
 
             const { name, type, tax, application_date, redeem_date, application_amount } = req.body;
 
+            const profits = await Profit.sum('amount', { where: { investment_id: req.params.id } });
+
+            const total = parseFloat(profits) + parseFloat(application_amount);
+            
             await Investment.update({
                 name,
                 type,
                 tax,
                 application_date,
                 redeem_date,
-                application_amount
+                application_amount,
+                total_amount: total
             }, {
                 where: {
                     id: req.params.id
+                }
+            });
+
+            const investment_target = await Investment.sum('total_amount', { where: { target_id: req.headers.target_id } });
+
+            await Target.update({
+                actual_amount: investment_target,
+            }, {
+                where: {
+                    id: req.headers.target_id
+                }
+            });
+
+            const investment_account = await Investment.sum('total_amount', { where: { account_id: req.headers.account_id } });
+    
+            await Account.update({
+                investments_balance: investment_account
+            } , {
+                where: {
+                    id: req.headers.account_id
                 }
             });
 
@@ -90,6 +123,26 @@ module.exports = {
             await Investment.destroy({
                 where: {
                     id: req.params.id
+                }
+            });
+
+            const investment_target = await Investment.sum('total_amount', { where: { target_id: req.headers.target_id } });
+
+            await Target.update({
+                actual_amount: investment_target,
+            }, {
+                where: {
+                    id: req.headers.target_id
+                }
+            });
+
+            const investment_account = await Investment.sum('total_amount', { where: { account_id: req.headers.account_id } });
+    
+            await Account.update({
+                investments_balance: investment_account
+            } , {
+                where: {
+                    id: req.headers.account_id
                 }
             });
 
