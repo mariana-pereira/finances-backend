@@ -1,6 +1,53 @@
 const { Movimentation, Account, Company } = require('../models');
 
 module.exports = {
+    async store(req, res) {
+        try {
+            const { amount } = req.body;
+            const value = '-' + amount;
+
+            await Movimentation.create({
+                ...req.body,
+                user_id: req.userId,
+                account_id: req.headers.target_id,
+                type: 'Transferência'
+            });
+
+            await Movimentation.create({
+                ...req.body,
+                amount: value,
+                user_id: req.userId,
+                account_id: req.headers.origin_id,
+                type: 'Transferência'
+            });
+
+            const origin = await Movimentation.sum('amount', { where: { account_id: req.headers.origin_id } });
+                
+            await Account.update({
+                account_balance: origin
+            } , {
+                where: {
+                    id: req.headers.origin_id
+                }
+            });
+
+            const target = await Movimentation.sum('amount', { where: { account_id: req.headers.target_id } });
+                
+            await Account.update({
+                account_balance: target
+            } , {
+                where: {
+                    id: req.headers.target_id
+                }
+            });
+
+            return res.status(200).send({ message: 'Success on money transfer' });;
+
+        } catch (err) {
+            return res.status(400).send({ error: 'Error creating movimentation' });
+
+        }
+    },
 
     async show(req, res) {
         try {

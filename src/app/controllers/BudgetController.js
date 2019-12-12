@@ -38,9 +38,10 @@ module.exports = {
     async update(req, res) {
         try {
 
-            const { amount } = req.body;
+            const { name, amount } = req.body;
 
             await Budget.update({
+                name,
                 amount
             }, {
                 where: {

@@ -104,6 +104,8 @@ routes.get('/items', ItemController.index);
 routes.post('/items', ItemController.store);
 routes.delete('/items/:id', ItemController.destroy);
 
+routes.post('/movimentations/transfer', MovimentationController.store);
+
 routes.post('/movimentations/income', MovimentationIncomeController.store);
 routes.post('/movimentations/outcome', MovimentationOutcomeController.store);
 routes.get('/movimentations/income/month', MovimentationIncomeController.index);
