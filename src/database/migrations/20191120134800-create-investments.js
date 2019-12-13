@@ -43,21 +43,21 @@ module.exports = {
       },
       target_id: {
         type: Sequelize.INTEGER,
-        references: { model: 'Targets', key: 'id' },
+        references: { model: 'targets', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
         allowNull: false
       },
       account_id: {
         type: Sequelize.INTEGER,
-        references: { model: 'Accounts', key: 'id' },
+        references: { model: 'accounts', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
         allowNull: false
       },
       user_id: {
         type: Sequelize.INTEGER,
-        references: { model: 'Users', key: 'id' },
+        references: { model: 'users', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
         allowNull: false

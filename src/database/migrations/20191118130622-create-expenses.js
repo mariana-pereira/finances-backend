@@ -27,21 +27,21 @@ module.exports = {
       },
       invoice_id: {
         type: Sequelize.INTEGER,
-        references: { model: 'Invoices', key: 'id' },
+        references: { model: 'invoices', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
         allowNull: false
       },
       card_id: {
         type: Sequelize.INTEGER,
-        references: { model: 'Cards', key: 'id' },
+        references: { model: 'cards', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
         allowNull: false
       },
       user_id: {
         type: Sequelize.INTEGER,
-        references: { model: 'Users', key: 'id' },
+        references: { model: 'users', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
         allowNull: false

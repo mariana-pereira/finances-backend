@@ -27,21 +27,21 @@ module.exports = {
       },
       account_id: {
         type: DataTypes.INTEGER,
-        references: { model: 'Accounts', key: 'id' },
+        references: { model: 'accounts', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
         allowNull: false
       },
       company_id: {
         type: DataTypes.INTEGER,
-        references: { model: 'Companies', key: 'id' },
+        references: { model: 'companies', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
         allowNull: true
       },
       user_id: {
         type: DataTypes.INTEGER,
-        references: { model: 'Users', key: 'id' },
+        references: { model: 'users', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
         allowNull: false

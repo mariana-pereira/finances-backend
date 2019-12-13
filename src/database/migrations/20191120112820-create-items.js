@@ -19,7 +19,7 @@ module.exports = {
       },
       expense_id: {
         type: Sequelize.INTEGER,
-        references: { model: 'Expenses', key: 'id' },
+        references: { model: 'expenses', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
         allowNull: false
