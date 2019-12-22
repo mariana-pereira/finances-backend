@@ -33,7 +33,7 @@ module.exports = {
             });
 
             await Account.update({
-                investments_balance: total
+                investments_balance: investment_amount
             } , {
                 where: {
                     id: investment.account_id
