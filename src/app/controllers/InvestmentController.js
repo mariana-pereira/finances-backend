@@ -1,4 +1,4 @@
-const { Investment, Account, Target, Profit } = require('../models');
+const { Investment, Account, Target, Profit, Movimentation } = require('../models');
 
 module.exports = {
     async store(req, res) {
@@ -6,7 +6,20 @@ module.exports = {
 
             const investment = await Investment.create({ ...req.body, account_id: req.headers.account_id, user_id: req.userId, total_amount: req.body.application_amount });
 
+            const amount = req.body.application_amount;
+            const value = '-' + amount;
+
+            await Movimentation.create({
+                date: new Date(),
+                user_id: req.userId,
+                account_id: req.headers.account_id,
+                amount: value,
+                type: 'Débito',
+                category: 'Investimento'
+            });
+
             const investment_target = await Investment.sum('total_amount', { where: { target_id: investment.target_id } });
+            const movimentations = await Movimentation.sum('amount', { where: { account_id: req.headers.account_id } });
 
             await Target.update({
                 actual_amount: investment_target,
@@ -19,7 +32,8 @@ module.exports = {
             const investment_account = await Investment.sum('total_amount', { where: { account_id: investment.account_id } });
     
             await Account.update({
-                investments_balance: investment_account
+                investments_balance: investment_account,
+                account_balance: movimentations
             } , {
                 where: {
                     id: investment.account_id
