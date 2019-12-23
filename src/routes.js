@@ -18,6 +18,7 @@ const ExpenseDashboardController = require('./app/controllers/ExpenseDashboardCo
 const ExpenseCategoryMonthController = require('./app/controllers/ExpenseCategoryMonthController');
 const ExpenseCategoryYearController = require('./app/controllers/ExpenseCategoryYearController');
 const InvestmentController = require('./app/controllers/InvestmentController');
+const RedeemInvestmentController = require('./app/controllers/RedeemInvestmentController');
 const InvoiceController = require('./app/controllers/InvoiceConreoller');
 const InvoiceCardController = require('./app/controllers/InvoiceCardController');
 const InvoiceDashboardController = require('./app/controllers/InvoiceDashboardController');
@@ -82,6 +83,8 @@ routes.get('/expenses/:id', ExpenseController.show);
 routes.post('/expenses', ExpenseController.store);
 routes.put('/expenses/:id', ExpenseController.update);
 routes.delete('/expenses/:id', ExpenseController.destroy);
+
+routes.delete('/investments/redeem/:id', RedeemInvestmentController.destroy);
 
 routes.get('/investments', InvestmentController.index);
 routes.get('/investments/:id', InvestmentController.show);
