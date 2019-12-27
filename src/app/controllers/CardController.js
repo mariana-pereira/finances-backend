@@ -38,11 +38,11 @@ module.exports = {
     async update(req, res) {
         try {
 
-            const { name, number, total_limit, available_limit, expiry_date } = req.body;
+            const { name, total_limit, available_limit, expiry_date } = req.body;
     
+            
             await Card.update({
                 name, 
-                number,
                 total_limit, 
                 available_limit,
                 expiry_date,
